@@ -29,7 +29,7 @@ public class AdminController {
         model.addAttribute("currentUser", curentUser);
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("roles", roleService.getRoles());
-        return "admin_panel";
+        return "adminPanel";
     }
 
     @PatchMapping("/editUser")

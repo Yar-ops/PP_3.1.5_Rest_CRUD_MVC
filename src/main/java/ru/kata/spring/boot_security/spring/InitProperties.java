@@ -11,12 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class Init_Properties {
+public class InitProperties {
 
     private final UserServiceImp userService;
 
     @Autowired
-    public Init_Properties(UserServiceImp userService) {
+    public InitProperties(UserServiceImp userService) {
         this.userService = userService;
     }
 
