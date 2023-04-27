@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.spring.model.User;
 import ru.kata.spring.boot_security.spring.repository.UserRepository;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
 
     @Override
     public User getById(long id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -49,22 +50,16 @@ public class UserServiceImp implements UserDetailsService, UserService {
     @Transactional
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(user.getEMail());
         userRepository.save(user);
     }
 
     @Override
     @Transactional
     public void editUser(User user) {
-        User userToEdit = getById(user.getId());
-        userToEdit.setEMail(user.getEMail());
-        userToEdit.setAge(user.getAge());
-        userToEdit.setLastName(user.getLastName());
-        userToEdit.setFirstName(user.getFirstName());
-        if (!passwordEncoder.encode(user.getPassword()).equals(userToEdit.getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        userToEdit.setRoles(user.getRoles());
-        userRepository.save(userToEdit);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(user.getEMail());
+        userRepository.save(user);
     }
 
     @Override

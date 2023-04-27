@@ -24,13 +24,13 @@ public class InitProperties {
     public void init() {
         User user = userService.getByeMail("admin@mail.ru");
         if (user == null) {
-            User admin = new User("admin@ad", "admin", "Vasya", "Ivanov", 20);
             Role userRole = new Role("ROLE_USER");
             Role adminRole = new Role("ROLE_ADMIN");
             Set<Role> adminRoles = new HashSet<>();
             adminRoles.add(userRole);
             adminRoles.add(adminRole);
-            admin.setRoles(adminRoles);
+            //admin.setRoles(adminRoles);
+            User admin = new User(adminRoles, "Vasya", "Ivanov", 20, "admin@mail.ru", "admin", "admin");
             userService.addUser(admin);
         }
     }

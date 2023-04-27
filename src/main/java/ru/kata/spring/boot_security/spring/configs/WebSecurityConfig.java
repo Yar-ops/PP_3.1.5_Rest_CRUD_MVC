@@ -30,31 +30,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/user/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login", "/registration", "/error").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/admins").hasRole("ADMIN")
+                .antMatchers("/api/user").hasAnyRole("ADMIN", "USER")
                 .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/process_login")
-                .successHandler(successUserHandler)
+                .formLogin().successHandler(successUserHandler).loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .permitAll()
                 .and()
                 .logout()
+                .permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/login")
+                .and()
+                .csrf().disable();
     }
-
-    /*// аутентификация inMemory
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("user")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,12 +9,15 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "eMail",columnNames = {"email"})})
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "username", unique = true)
+    private String username;
 
     @Column(name = "firstname")
     private String firstName;
@@ -39,17 +43,20 @@ public class User implements UserDetails {
     public User() {
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
-    public User(String eMail, String password, String firstName, String lastName, Integer age) {
-        this.eMail = eMail;
-        this.password = password;
+    public User(Set<Role> roles, String firstName, String lastName, int age, String email, String username, String password) {
+        this.roles = roles;
         this.firstName = firstName;
-        this.age = age;
         this.lastName = lastName;
+        this.age = age;
+        this.eMail = email;
+        this.username = username;
+        this.password = password;
     }
 
     public Long getId() {
@@ -58,6 +65,10 @@ public class User implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {

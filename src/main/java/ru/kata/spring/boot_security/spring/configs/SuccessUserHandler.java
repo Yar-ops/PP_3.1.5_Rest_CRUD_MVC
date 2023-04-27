@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.spring.configs;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -13,26 +14,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-
-    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
-    }
-
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        for (GrantedAuthority authority : authorities) {
-            if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                redirectStrategy.sendRedirect(request, response, "/admin/users");
-                return;
-            }
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        if (roles.contains("ROLE_ADMIN")) {
+            httpServletResponse.sendRedirect("/admin");
+        } else {
+            httpServletResponse.sendRedirect("/user");
         }
-        redirectStrategy.sendRedirect(request, response, "/user");
     }
 }
