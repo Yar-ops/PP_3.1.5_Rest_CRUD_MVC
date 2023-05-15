@@ -7,7 +7,9 @@ import ru.kata.spring.boot_security.spring.model.User;
 import ru.kata.spring.boot_security.spring.service.UserServiceImp;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -26,7 +28,8 @@ public class InitProperties {
         if (user == null) {
             Role userRole = new Role("ROLE_USER");
             Role adminRole = new Role("ROLE_ADMIN");
-            Set<Role> adminRoles = new HashSet<>();
+            List<Role> adminRoles = new ArrayList<>();
+            //Set<Role> adminRoles = new HashSet<>();
             adminRoles.add(userRole);
             adminRoles.add(adminRole);
             //admin.setRoles(adminRoles);

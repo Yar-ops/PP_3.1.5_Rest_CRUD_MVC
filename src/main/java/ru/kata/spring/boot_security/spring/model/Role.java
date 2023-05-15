@@ -2,9 +2,9 @@ package ru.kata.spring.boot_security.spring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
 import java.util.List;
+
 
 @Entity
 @Table(name = "roles")
@@ -14,8 +14,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String name;
+    @Column(name = "authority")
+    private String authority;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")
@@ -24,13 +24,13 @@ public class Role implements GrantedAuthority {
     public Role() {
     }
 
-    public Role(String name) {
-        this.name = name;
+    public Role(String authority) {
+        super();
+        this.authority = authority;
     }
 
-    @Override
     public String getAuthority() {
-        return name;
+        return authority;
     }
 
     public Long getId() {
@@ -41,12 +41,8 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 
     public List<User> getUsers() {
@@ -72,13 +68,18 @@ public class Role implements GrantedAuthority {
 
     @Override
     public int hashCode() {
-        return getId() != null ? getId().hashCode() : 0;
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getAuthority() != null ? getAuthority().hashCode() : 0);
+        result = 31 * result + (getUsers() != null ? getUsers().hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return name;
+        return "Role{" +
+                "id=" + id +
+                ", authority='" + authority + '\'' +
+                ", users=" + users +
+                '}';
     }
-
-
 }

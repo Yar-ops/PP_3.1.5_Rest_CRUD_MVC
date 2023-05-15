@@ -12,7 +12,7 @@ $(async function () {
 })
 
 async function getUser(id) {
-    let response = await fetch('/api/admins/' + id)
+    let response = await fetch('/api/users/' + id)
     return await response.json()
 }
 
@@ -31,7 +31,7 @@ async function fillModalForm(form, modal, id) {
 // Filling Users Table
 function fillUsersTable() {
     allUsersTable.empty()
-    fetch('/api/admins')
+    fetch('/api/users')
         .then(res => res.json())
         .then(data =>
             data.forEach(user => {
@@ -80,7 +80,7 @@ function editUser() {
             }
         }
 
-        fetch('/api/admins', {
+        fetch('/api/users', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -119,7 +119,7 @@ async function openDeleteModal(id) {
 function deleteUser() {
     deleteModalForm.addEventListener("submit", event => {
         event.preventDefault()
-        fetch("/api/admins/" + deleteModalForm.id.value, {
+        fetch("/api/users/" + deleteModalForm.id.value, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ function addUser() {
             }
         }
         console.log(newUserRoles);
-        fetch('/api/admins', {
+        fetch('/api/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -170,7 +170,7 @@ function addUser() {
 
 // Get Authenticated User
 function getAuthenticatedUser() {
-    fetch('api/user')
+    fetch('/api/user')
         .then(res => res.json())
         .then(data => {
             $('#authenticatedUserEmail').append(data.email);

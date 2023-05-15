@@ -50,7 +50,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
     @Transactional
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUsername(user.getEMail());
+        user.setUsername(user.getEmail());
         userRepository.save(user);
     }
 
@@ -58,7 +58,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
     @Transactional
     public void editUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUsername(user.getEMail());
+        user.setUsername(user.getEmail());
         userRepository.save(user);
     }
 
