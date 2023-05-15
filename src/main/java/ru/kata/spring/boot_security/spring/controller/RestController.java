@@ -29,7 +29,6 @@ public class RestController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //////!!!!!!!!!!!!!!!!!!!!!!!
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.getById(id);
@@ -55,7 +54,7 @@ public class RestController {
         userService.deleteUser(id);
         return new ResponseEntity<>("User with ID = " + id + " was deleted", HttpStatus.OK);
     }
-    //////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     @GetMapping("/user")
     public ResponseEntity<User> getAuthenticatedUser(Principal principal) {
         User user = userService.getByeMail(principal.getName());
